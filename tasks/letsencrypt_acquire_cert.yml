@@ -1,0 +1,40 @@
+---
+- name: Stop services that need to be stopped before creating and copying the certificate
+  service:
+    name: "{{item}}"
+    state: stopped
+  with_items:
+    - "{{letsencrypt_services_to_shutdown}}"
+  when: letsencrypt_services_to_shutdown is defined
+
+- name: Include webroot steps when authenticator=webroot
+  include: letsencrypt_webroot_steps.yml
+  when: letsencrypt_authenticator == "webroot"
+
+- name: Include standalone steps when authenticator=standalone
+  include: letsencrypt_standalone_steps.yml
+  when: letsencrypt_authenticator == "standalone"
+
+- name: Fix the renewal file
+  ini_file:
+    section: "renewalparams"
+    option: "{{item.key}}"
+    value: "{{item.value}}"
+    dest: "/etc/letsencrypt/renewal/{{letsencrypt_cert_domains[0]}}.conf"
+  with_dict: "{{letsencrypt_renewal_dict}}"
+
+- name: Install renewal cron
+  cron:
+    name: "Let's Encrypt Renewal"
+    day: "{{letsencrypt_renewal_frequency.day}}"
+    hour: "{{letsencrypt_renewal_frequency.hour}}"
+    minute: "{{letsencrypt_renewal_frequency.minute}}"
+    job: '{{letsencrypt_executable}} renew {{letsencrypt_renewal_command_args}} > /dev/null'
+
+- name: Start services back that were stopped before creating the certificate
+  service:
+    name: "{{item}}"
+    state: started
+  with_items:
+    - "{{letsencrypt_services_to_shutdown}}"
+  when: letsencrypt_services_to_shutdown is defined

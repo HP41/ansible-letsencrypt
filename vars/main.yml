@@ -1,0 +1,22 @@
+---
+letsencrypt_git_repo: "https://github.com/certbot/certbot.git"
+letsencrypt_git_clone_location: "/opt/certbot"
+letsencrypt_git_version: "master"
+
+letsencrypt_executable: "{{letsencrypt_git_clone_location}}/certbot-auto"
+letsencrypt_config_location: "/etc/letsencrypt"
+letsencrypt_certificate_location: "{{letsencrypt_config_location}}/live"
+
+letsencrypt_command: >
+  {{ letsencrypt_executable }}
+  --non-interactive --agree-tos
+  --email {{ letsencrypt_email }}
+  {% if letsencrypt_rsa_key_size is defined %}--rsa-key-size {{ letsencrypt_rsa_key_size }}{% endif %}
+  --text{% for domain in letsencrypt_cert_domains %} -d {{ domain }}{% endfor %}  
+  {% if letsencrypt_server is defined %}--server {{ letsencrypt_server }}{% endif %}
+  {% if letsencrypt_expand %}--expand{% endif %}
+  {% if letsencrypt_test_certs %}--test-cert{% endif %}
+
+letsencrypt_authenticator_options:
+  - "webroot"
+  - "standalone"

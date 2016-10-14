@@ -1,0 +1,9 @@
+---
+- name: Update apt cache.
+  apt: update_cache=yes
+
+- name: Install LetsEncrypt/Certbot using the git repo
+  include: letsencrypt_install.yml
+
+- name: Acquire Certificate using LetsEncrypt/Certbot
+  include: letsencrypt_acquire_cert.yml

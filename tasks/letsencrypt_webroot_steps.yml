@@ -1,0 +1,26 @@
+---
+- name: Ensure webroot exists
+  file:
+    path: "{{letsencrypt_webroot_path}}"
+    state: directory
+
+- name: Check port 80
+  shell: netstat -tulpn | grep :80
+  register: letsencrypt_port_80
+  ignore_errors: True
+  changed_when: False
+
+- name: Attempt to get the certificate using the webroot authenticator
+  command: "{{letsencrypt_command}} certonly --webroot --webroot-path {{letsencrypt_webroot_path}}"
+  args:
+    creates: "{{letsencrypt_certificate_location}}/{{letsencrypt_cert_domains[0]}}"
+  when: "{{ letsencrypt_port_80|success }}"
+
+- name: Fix the webroot map in the renewal file
+  ini_file:
+    section: "[webroot_map]"
+    option: "{{item}}"
+    value: "{{letsencrypt_webroot_path}}"
+    dest: "{{letsencrypt_config_location}}/renewal/{{letsencrypt_cert_domains[0]}}.conf"
+  with_items:
+    - "{{letsencrypt_cert_domains}}"

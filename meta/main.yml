@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  author: Hitesh Prabhakar
+  description: Generate TLS certificates and get them signed by Let's Encrypt. Standalone and Webroot methods supported
+  license: MIT
+  min_ansible_version: 2.1
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+        - precise
+    - name: Debian
+      versions:
+        - wheezy
+        - jessie
+        - stretch
+
+  galaxy_tags:
+    - networking
+    - web
+
+dependencies: []

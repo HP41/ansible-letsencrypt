@@ -1,0 +1,43 @@
+---
+letsencrypt_cert_domains:
+  - "{{ansible_fqdn}}"
+letsencrypt_webroot_path: /var/www
+letsencrypt_authenticator: standalone
+letsencrypt_standalone_copy_certificate: False
+letsencrypt_email: "webmaster@{{ansible_domain}}"
+letsencrypt_expand: True
+letsencrypt_test_certs: True
+letsencrypt_renewal_frequency:
+  day: "*"
+  hour: 0
+  minute: 0
+
+letsencrypt_renewal_command_args: ''
+letsencrypt_renewal_dict:
+    os_packages_only: False
+    verb: certonly
+    noninteractive_mode: False
+    uir: False
+    hsts: False
+    authenticator: '{{ letsencrypt_authenticator }}'
+
+letsencrypt__debops_ferm_dependent_rules:
+  - name: 'letsencrypt_ssl_https'
+    chain: 'INPUT'
+    type: 'accept'
+    protocol: 'tcp'
+    dport: ['https']
+    accept_any: True
+
+##################################################
+############# CONFIGURABLE VARIABLES #############
+##################################################
+
+#letsencrypt_rsa_key_size: ''
+#letsencrypt_server: ''
+#letsencrypt_services_to_shutdown: ''
+
+#letsencrypt_standalone_public_key_copy_locations_and_filename: ''
+#letsencrypt_standalone_private_key_copy_locations_and_filename: ''
+#letsencrypt_standalone_chain_key_copy_locations_and_filename: ''
+#letsencrypt_standalone_full_chain_key_copy_locations_and_filename: ''

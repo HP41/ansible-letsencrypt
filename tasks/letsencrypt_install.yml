@@ -1,0 +1,19 @@
+---
+- name: Clone Let's Encrypt client git repository to given location
+  git:
+    repo: "{{letsencrypt_git_repo}}"
+    dest: "{{letsencrypt_git_clone_location}}"
+    accept_hostkey: yes
+    update: yes
+    version: "{{letsencrypt_git_version}}"
+    force: yes
+
+- name: Apply executable rights to certbot-auto
+  file:
+    path: "{{letsencrypt_git_clone_location}}/certbot-auto"
+    mode: a+x
+
+- name: Install all necessary OS packages for Let's Encrypt
+  command: "{{letsencrypt_git_clone_location}}/certbot-auto --non-interactive --os-packages-only"
+  register: letsencrypt_packages
+  changed_when: letsencrypt_packages.stdout_lines|length > 1

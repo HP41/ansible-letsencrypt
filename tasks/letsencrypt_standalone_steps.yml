@@ -1,0 +1,53 @@
+---
+- name: Attempt to get the certificate using the standalone authenticator
+  command: "{{letsencrypt_command}} certonly --standalone"
+  args:
+    creates: "{{letsencrypt_certificate_location}}/{{letsencrypt_cert_domains[0]}}"
+
+- name: Copying the public key over to final destination
+  copy:
+    src: "{{letsencrypt_certificate_location}}/{{letsencrypt_cert_domains[0]}}/cert.pem"
+    dest: "{{item}}"
+    owner: root
+    group: root
+    mode: 0600
+    remote_src: True
+  with_items:
+    - "{{letsencrypt_standalone_public_key_copy_locations_and_filename}}"
+  when: (letsencrypt_standalone_copy_certificate) and (letsencrypt_standalone_public_key_copy_locations_and_filename is defined)
+
+- name: Copying the private key over to final destination
+  copy:
+    src: "{{letsencrypt_certificate_location}}/{{letsencrypt_cert_domains[0]}}/privkey.pem"
+    dest: "{{item}}"
+    owner: root
+    group: root
+    mode: 0600
+    remote_src: True
+  with_items:
+    - "{{letsencrypt_standalone_private_key_copy_locations_and_filename}}"
+  when: (letsencrypt_standalone_copy_certificate) and (letsencrypt_standalone_private_key_copy_locations_and_filename is defined)
+
+- name: Copying the chain key over to final destination
+  copy:
+    src: "{{letsencrypt_certificate_location}}/{{letsencrypt_cert_domains[0]}}/chain.pem"
+    dest: "{{item}}"
+    owner: root
+    group: root
+    mode: 0600
+    remote_src: True
+  with_items:
+    - "{{letsencrypt_standalone_chain_key_copy_locations_and_filename}}"
+  when: (letsencrypt_standalone_copy_certificate) and (letsencrypt_standalone_chain_key_copy_locations_and_filename is defined)
+
+- name: Copying the full chain key over to final destination
+  copy:
+    src: "{{letsencrypt_certificate_location}}/{{letsencrypt_cert_domains[0]}}/fullchain.pem"
+    dest: "{{item}}"
+    owner: root
+    group: root
+    mode: 0600
+    remote_src: True
+  with_items:
+    - "{{letsencrypt_standalone_full_chain_key_copy_locations_and_filename}}"
+  when: (letsencrypt_standalone_copy_certificate) and (letsencrypt_standalone_full_chain_key_copy_locations_and_filename is defined)
