@@ -1,4 +1,6 @@
-# letsencrypt
+# Ansible Role: letsencrypt
+
+[![Build Status](https://travis-ci.org/HP41/ansible-letsencrypt.svg?branch=master)](https://travis-ci.org/HP41/ansible-letsencrypt)
 
 ### First, read Let's Encrypt's TOS and EULA. Only proceed if you agree to them.
 
