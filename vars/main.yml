@@ -11,9 +11,9 @@ letsencrypt_command: >
   {{ letsencrypt_executable }}
   --non-interactive --agree-tos
   --email {{ letsencrypt_email }}
-  {% if letsencrypt_rsa_key_size is defined %}--rsa-key-size {{ letsencrypt_rsa_key_size }}{% endif %}
+  {% if letsencrypt_rsa_key_size|default("") != "" %}--rsa-key-size {{ letsencrypt_rsa_key_size }}{% endif %}
   --text{% for domain in letsencrypt_cert_domains %} -d {{ domain }}{% endfor %}  
-  {% if letsencrypt_server is defined %}--server {{ letsencrypt_server }}{% endif %}
+  {% if letsencrypt_server|default("") != "" %}--server {{ letsencrypt_server }}{% endif %}
   {% if letsencrypt_expand %}--expand{% endif %}
   {% if letsencrypt_test_certs %}--test-cert{% endif %}
 

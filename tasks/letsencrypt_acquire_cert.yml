@@ -5,7 +5,6 @@
     state: stopped
   with_items:
     - "{{letsencrypt_services_to_shutdown}}"
-  when: letsencrypt_services_to_shutdown is defined
 
 - name: Include webroot steps when authenticator=webroot
   include: letsencrypt_webroot_steps.yml
@@ -37,4 +36,3 @@
     state: started
   with_items:
     - "{{letsencrypt_services_to_shutdown}}"
-  when: letsencrypt_services_to_shutdown is defined

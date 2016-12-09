@@ -29,15 +29,13 @@ letsencrypt__debops_ferm_dependent_rules:
     dport: ['https']
     accept_any: True
 
-##################################################
-############# CONFIGURABLE VARIABLES #############
-##################################################
+letsencrypt_services_to_shutdown: []
 
-#letsencrypt_rsa_key_size: ''
-#letsencrypt_server: ''
-#letsencrypt_services_to_shutdown: ''
+letsencrypt_standalone_public_key_copy_locations_and_filename: []
+letsencrypt_standalone_private_key_copy_locations_and_filename: []
+letsencrypt_standalone_chain_key_copy_locations_and_filename: []
+letsencrypt_standalone_full_chain_key_copy_locations_and_filename: []
 
-#letsencrypt_standalone_public_key_copy_locations_and_filename: ''
-#letsencrypt_standalone_private_key_copy_locations_and_filename: ''
-#letsencrypt_standalone_chain_key_copy_locations_and_filename: ''
-#letsencrypt_standalone_full_chain_key_copy_locations_and_filename: ''
+letsencrypt_rsa_key_size: ""
+letsencrypt_server: ""
+letsencrypt_rsa_key_size: ""
